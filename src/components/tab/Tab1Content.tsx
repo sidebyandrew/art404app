@@ -33,6 +33,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ToastAction } from '@/components/ui/toast';
 import { toast } from '@/components/ui/use-toast';
+import {Skeleton} from "@/components/ui/skeleton";
+import {QuestionMarkCircledIcon} from "@radix-ui/react-icons";
+import {Progress} from "@/components/ui/progress";
 
 
 interface MintInfo {
@@ -138,65 +141,7 @@ export default function Tab1Content() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const client = new TonClient(
-          {
-            endpoint: isMainnet ? ENDPOINT_MAINNET_RPC : ENDPOINT_TESTNET_RPC,
-          });
 
-        const master_tx = await client.runMethod(
-          Address.parse(t404_jetton_master_address), 'get_404_jetton_data');
-        // @ts-ignore
-
-        let master_result = master_tx.stack;
-        // let total_supply = master_result.readBigNumber();
-        // let mintable = master_result.readBoolean();
-        // let owner = master_result.readAddress();
-        // let content = master_result.readCell();
-        // let jetton_wallet_code = master_result.readCell();
-        // let nft_collection_address = master_result.readAddress();
-
-        //-1:true(can mint), 0:false(can not) : BACKEND USE, not for front end
-        // let freemint_flag = master_result.readNumber();
-
-        //3 000000000n 当前已经 mint 的数字
-        // let freemint_current_supply = master_result.readBigNumber();
-        // let freemint_current_supply_number = Number(freemint_current_supply / BASE_NANO_BIGINT) - roundAccumulatedOffset;
-
-        //1000 000000000n
-        // let freemint_max_supply = master_result.readBigNumber();
-        // let freemint_max_supply_number = Number(freemint_max_supply / BASE_NANO_BIGINT) - roundAccumulatedOffset;
-
-
-        let max_supply = master_result.readBigNumber();
-        let mintable = master_result.readBoolean();
-        let owner = master_result.readAddress();
-        let content = master_result.readCell();
-        let jetton_wallet_code = master_result.readCell();
-        let nft_item_code = master_result.readCell();
-        let nft_collection_address = master_result.readAddress();
-        let freemint_flag = master_result.readNumber();
-        let freemint_current_supply = master_result.readBigNumber();
-        let freemint_max_supply = master_result.readBigNumber();
-        let freemint_price = master_result.readBigNumber();
-        let total_supply = master_result.readBigNumber();
-
-        let freemint_current_supply_number = Number(freemint_current_supply / BASE_NANO_BIGINT) - roundAccumulatedOffset;
-        let freemint_max_supply_number = Number(freemint_max_supply / BASE_NANO_BIGINT) - roundAccumulatedOffset;
-
-
-        //1 000000000n
-        let freemint_price_number = Number(freemint_price);
-        let mintInfo: MintInfo = {
-          fetchFormRemote: true,
-          freemintIsOpen: freemint_max_supply_number - freemint_current_supply_number > 1,
-          freemintCurrentSupply: freemint_current_supply_number,
-          freemintMaxSupply: freemint_max_supply_number,
-          freemintTonPrice: freemint_price_number / BASE_NANO_NUMBER,
-          progressRate: Number(Number(100 * freemint_current_supply_number / freemint_max_supply_number).toFixed(1)),
-        };
-
-        setMintInfo(mintInfo);
-        setTx(buildTx(1, mintInfo));
 
 
       } catch (error) {
@@ -287,72 +232,55 @@ export default function Tab1Content() {
       </div>
       <div className="flex flex-col">
 
-        {/*{rpcErrorInfo.isRpcError &&*/}
 
-        {/*  <div className="flex flex-col space-y-3 items-center">*/}
 
-        {/*    <Skeleton className="h-[125px] w-[250px] rounded-xl" />*/}
-        {/*    <div className="space-y-2">*/}
-        {/*      <Skeleton className="h-4 w-[250px]" />*/}
-        {/*      <Skeleton className="h-4 w-[200px]" />*/}
-        {/*    </div>*/}
-        {/*    <div className="text-red-400">TON RPC Server is busy, but you can try to mint.</div>*/}
-        {/*  </div>*/}
+        {!rpcErrorInfo.isRpcError && <div>
 
-        {/*}*/}
-        {/*{!rpcErrorInfo.isRpcError && <div>*/}
+          {mintInfo.fetchFormRemote && mintInfo.freemintIsOpen && (
+              <div className="flex justify-center text-gray-400">
+                Minted Count：2,360
+              </div>)}
 
-        {/*  {mintInfo.fetchFormRemote && mintInfo.freemintIsOpen && (*/}
-        {/*    <div className="flex justify-center text-gray-400">*/}
-        {/*      Minted Count：{mintInfo.freemintCurrentSupply}*/}
-        {/*    </div>)}*/}
+          <div className="flex justify-center  text-gray-400">
+            Round Supply：10k
+          </div>
 
-        {/*  <div className="flex justify-center  text-gray-400">*/}
-        {/*    Round Supply：{mintInfo.freemintMaxSupply}*/}
-        {/*  </div>*/}
-        {/*  {mintInfo.fetchFormRemote && (*/}
 
-        {/*    <div className="flex justify-center text-gray-400">*/}
-        {/*      Price：Dynamic from {mintInfo.freemintTonPrice} to 5.2 Toncion*/}
-        {/*      <Popover>*/}
-        {/*        <PopoverTrigger className="text-gray-400">*/}
-        {/*          <QuestionMarkCircledIcon className="ml-2 text-yellow-500" />*/}
-        {/*        </PopoverTrigger>*/}
-        {/*        <PopoverContent>*/}
-        {/*          Index from 1 to 650, 4.04 TON*/}
-        {/*          Index from 650 to 850, 4.4 TON*/}
-        {/*          Index from 850-950, 4.8 TON*/}
-        {/*          Index from 950-1000, 5.2 TON*/}
-        {/*        </PopoverContent>*/}
-        {/*      </Popover>*/}
-        {/*    </div>*/}
+          <div className="flex justify-center text-gray-400">
+            Period：15 - 31 May
+          </div>
+          <div className="flex justify-center text-gray-400">
+            Price: from 5 to 20 ART
+            {/*<Popover>*/}
+            {/*  <PopoverTrigger className="text-gray-400">*/}
+            {/*    <QuestionMarkCircledIcon className="ml-2 text-yellow-500" />*/}
+            {/*  </PopoverTrigger>*/}
+            {/*  <PopoverContent>*/}
+            {/*   -*/}
+            {/*  </PopoverContent>*/}
+            {/*</Popover>*/}
+          </div>
+              <div className="flex items-center justify-center ">
+                <Progress
+                    value={23.2}
+                />
+                <div className=" text-gray-400">&nbsp;{23.2}%</div>
+              </div>
 
-        {/*  )}*/}
-        {/*  <div className="flex justify-center text-gray-400">*/}
-        {/*    Period：{FAIR_MINT_PERIOD}*/}
-        {/*  </div>*/}
-        {/*  {mintInfo.fetchFormRemote && (*/}
-        {/*    <div className="flex items-center justify-center ">*/}
-        {/*      <Progress*/}
-        {/*        value={mintInfo.progressRate}*/}
-        {/*      />*/}
-        {/*      <div className=" text-gray-400">&nbsp;{mintInfo.progressRate}%</div>*/}
-        {/*    </div>)}*/}
-
-        {/*</div>}*/}
+        </div>}
 
 
         <div className="flex flex-col mt-3">
           {'wallet?.account?.address' &&
-            <>
-              {/*mint amount start*/}
-              {/*<div className="flex mb-2 items-center">*/}
-              {/*  <div className="text-lg ">Mint Amount: &nbsp;</div>*/}
+              <>
+                {/*mint amount start*/}
+                {/*<div className="flex mb-2 items-center">*/}
+                {/*  <div className="text-lg ">Mint Amount: &nbsp;</div>*/}
 
-              {/*  <Button*/}
-              {/*    variant={'outline'}*/}
-              {/*    className="focus:outline-none text-2xl"*/}
-              {/*    onClick={handleDecrement}*/}
+                {/*  <Button*/}
+                {/*    variant={'outline'}*/}
+                {/*    className="focus:outline-none text-2xl"*/}
+                {/*    onClick={handleDecrement}*/}
               {/*  >*/}
               {/*    -*/}
               {/*  </Button>*/}
@@ -369,15 +297,12 @@ export default function Tab1Content() {
 
               <Button
                 size={'lg'}
-                variant={mintInfo.freemintIsOpen ? 'default' : 'outline'}
-                disabled={mintInfo.freemintIsOpen === false}
+                variant={ 'default'}
                 onClick={() => {
-
-
-                  return processMint(tx);
+                  quickToast("Stay tuned.","")
                 }
                 }>
-                {mintInfo.freemintIsOpen === false ? 'Fair Mint Finished' : 'Fair Mint'}
+                Fair Mint
               </Button>
 
             </>}
@@ -403,7 +328,7 @@ export default function Tab1Content() {
         <AccordionItem value="1">
           <AccordionTrigger>What is ART-404?</AccordionTrigger>
           <AccordionContent>
-            <p className="text-gray-400 indent-6">ART-404 is an innovative, mixed Jetton & NFT
+            <p className="text-gray-400 indent-6">ART-404 is an innovative, mixed Fungible Token & NFT
               implementation
               with
               native liquidity and

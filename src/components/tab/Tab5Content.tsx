@@ -22,7 +22,7 @@ let projectList: Project[] = [
     category: 'DeFi',
     badge: 'Done',
     badgeVariant: 'green',
-    desc: '404 Jetton Market build with order book.',
+    desc: '404 Token Market build with order book.',
     content: 'Built for the trading needs of some fractionalised A404 tokens. If you need high liquidity, pls refer to Artela DEX.',
   },
   {
@@ -59,7 +59,7 @@ let projectList: Project[] = [
     badge: 'Partnership',
     badgeVariant: 'purple',
     desc: '404 NFT with AIGC generated images',
-    content: 'Dynamically generate NFT images via AIGC, and use 404 to mix Jetton & NFT, which is a lot of fun!',
+    content: 'Dynamically generate NFT images via AIGC, and use 404 to mix Token & NFT, which is a lot of fun!',
   }, {
     title: 'Inscription 404',
     category: 'Inscription',

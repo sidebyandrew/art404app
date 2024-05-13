@@ -34,7 +34,7 @@ const MobileTab: React.FC<MobileTabProps> = ({ onTabChange }) => {
         <div className="flex justify-center  gap-5">
           <button
             className={`${
-              activeTab === 'tab1' ? 'text-yellow-500 ' : ''
+              activeTab === 'tab1' ? 'text-pink-500 ' : ''
             } rounded px-1 py-2 mb-2`}
             onClick={() => handleTabClick('tab1')}
           >
@@ -52,7 +52,7 @@ const MobileTab: React.FC<MobileTabProps> = ({ onTabChange }) => {
 
           {/*<button*/}
           {/*  className={`${*/}
-          {/*    activeTab === 'tab2' ? 'text-yellow-500 ' : ''*/}
+          {/*    activeTab === 'tab2' ? 'text-pink-500 ' : ''*/}
           {/*  } rounded px-1 py-2 mb-2`}*/}
           {/*  onClick={() => handleTabClick('tab2')}*/}
           {/*>*/}
@@ -71,7 +71,7 @@ const MobileTab: React.FC<MobileTabProps> = ({ onTabChange }) => {
 
           <button
             className={`${
-              activeTab === 'tab3' ? 'text-yellow-500 ' : ''
+              activeTab === 'tab3' ? 'text-pink-500 ' : ''
             } rounded px-1 py-2 mb-2`}
             onClick={() => handleTabClick('tab3')}
           >
@@ -90,7 +90,7 @@ const MobileTab: React.FC<MobileTabProps> = ({ onTabChange }) => {
 
           <button
             className={`${
-              activeTab === 'tab4' ? 'text-yellow-500 ' : ''
+              activeTab === 'tab4' ? 'text-pink-500 ' : ''
             } rounded px-1 py-2 mb-2`}
             onClick={() => handleTabClick('tab4')}
           >
@@ -106,7 +106,7 @@ const MobileTab: React.FC<MobileTabProps> = ({ onTabChange }) => {
           </button>
           <button
             className={`${
-              activeTab === 'tab5' ? 'text-yellow-500 ' : ''
+              activeTab === 'tab5' ? 'text-pink-500 ' : ''
             } rounded px-1 py-2 mb-2`}
             onClick={() => handleTabClick('tab5')}
           >

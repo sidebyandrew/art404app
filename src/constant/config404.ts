@@ -14,9 +14,9 @@ export const BASE_NANO_NUMBER: number = 1000000000;
 /* todo remove tma pink*/
 
 
-export const BASE_URL: string = 'http://localhost:3000';
+// export const BASE_URL: string = 'http://localhost:3000';
 // export const BASE_URL: string = 'https://staging.art404app.pages.dev';
-// export const BASE_URL: string = 'https://art404app.pages.dev';
+export const BASE_URL: string = 'https://art404app.pages.dev';
 export const isMainnet: boolean = true;
 export const isStayTuned: boolean = false;
 export const defaultMintPrice: number = 4.04;
