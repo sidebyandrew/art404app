@@ -94,13 +94,14 @@ export default function Tab1Content() {
   const [logMsg404, setLogMsg404] = useState('');
 
   let diamonds = [
-    "A1_DanteAlighieri.webp",
     "A2_FrancescoPetrarca.webp",
+
     "A3_GiovanniBoccaccio.webp",
     "A4_Michelangelo.jpg",
     "Art404.jpg",
     "B1_FlorenceCathedral.jpg",
     "C1.webp",
+    "A1_DanteAlighieri.webp",
     "C2_VitruvianMan.jpg"
 
   ];

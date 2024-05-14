@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 
 export default function Header404() {
@@ -22,7 +21,7 @@ export default function Header404() {
                 </div>
             </div>
             <div className="flex-item ml-auto">
-                <ConnectButton />
+                ConnectButton
             </div>
         </div>
     );

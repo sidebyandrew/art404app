@@ -1,9 +1,7 @@
-import '@rainbow-me/rainbowkit/styles.css';
 import { Providers } from './providers';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter, Inter as FontSans } from 'next/font/google';
-// import { Providers } from '@/app/providers';
 import '../styles/globals.css';
 import {ContextProps, TMAProvider} from '@/contexts/TMA';
 import { headers } from 'next/headers';
@@ -43,7 +41,7 @@ export default function RootLayout({
       fontSans.variable,
     )}>
     {/* todo remove tma pink*/}
-    <TMAProvider headers={headersForContext}>
+    {/*<TMAProvider headers={headersForContext}>*/}
     <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
       <div className="relative flex h-screen flex-col">
         <main className="">
@@ -52,7 +50,7 @@ export default function RootLayout({
         <Toaster />
       </div>
     </Providers>
-    </TMAProvider>
+    {/*</TMAProvider>*/}
     </body>
     </html>
   );
