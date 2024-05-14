@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { ThemeProviderProps } from "next-themes/dist/types";
 import {
   darkTheme,
   getDefaultConfig,
@@ -10,18 +9,58 @@ import {
 } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import { WagmiProvider } from "wagmi";
-import { arbitrum, base, mainnet, optimism, polygon } from "wagmi/chains";
+import { base, mainnet, polygon } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProviderProps } from "next-themes/dist/types";
 
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
 }
 
+//
+//
+//
+//
+//
+// const projectId = "bb84875c82bab72719dba296deb14d33";
+// const appName = "art404app";
+//
+// const connectors = connectorsForWallets(
+//   [
+//     {
+//       groupName: "Best compatibility",
+//       wallets: [walletConnectWallet, coinbaseWallet, rainbowWallet],
+//     },
+//   ],
+//   {
+//     projectId,
+//     appName,
+//   },
+// );
+//
+// const config = createConfig({
+//   connectors: [
+//     ...connectors,
+//     coinbaseWalletConnectors({
+//       appName,
+//     }),
+//     walletConnect({
+//       projectId,
+//     }),
+//   ],
+//   chains: [mainnet],
+//   transports: {
+//     [mainnet.id]: http(),
+//   },
+//   multiInjectedProviderDiscovery: false,
+//   ssr: true,
+// });
+
 const config = getDefaultConfig({
   appName: "art404app",
   projectId: "bb84875c82bab72719dba296deb14d33",
-  chains: [mainnet, polygon, optimism, arbitrum, base],
+  chains: [base, mainnet, polygon],
   ssr: true,
 });
 
@@ -33,7 +72,6 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider
-            modalSize="compact"
             theme={darkTheme({ ...darkTheme.accentColors.red })}
           >
             <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
