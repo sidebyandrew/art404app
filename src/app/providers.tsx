@@ -9,9 +9,9 @@ import {
 } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import { WagmiProvider } from "wagmi";
-import { base, mainnet, polygon } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProviderProps } from "next-themes/dist/types";
+import { sepolia } from "wagmi/chains";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -60,7 +60,8 @@ export interface ProvidersProps {
 const config = getDefaultConfig({
   appName: "art404app",
   projectId: "bb84875c82bab72719dba296deb14d33",
-  chains: [base, mainnet, polygon],
+  // chains: [sepolia, mainnet, polygon, base],
+  chains: [sepolia],
   ssr: true,
 });
 

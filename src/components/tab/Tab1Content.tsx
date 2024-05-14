@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import {
   Accordion,
@@ -37,6 +37,13 @@ import {
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { Progress } from "@/components/ui/progress";
+import {
+  useAccount,
+  useReadContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
+import { abi } from "@/contracts/contract-abi";
 
 interface MintInfo {
   fetchFormRemote: boolean;
@@ -52,27 +59,16 @@ interface RpcErrorInfo {
   errorMsg?: string;
 }
 
+const contractConfig = {
+  address: "0x86fbbb1254c39602a7b067d5ae7e5c2bdfd61a30",
+  abi,
+} as const;
+
 export default function Tab1Content() {
   /* todo remove tma */
   // const tgInitData = useInitData();
   //
   const tgInitData = { user: { id: 5499157826, username: "" } };
-
-  const [rpcErrorInfo, setRpcErrorInfo] = useState<RpcErrorInfo>({
-    isRpcError: false,
-    errorMsg: "",
-  });
-  const [mintInfo, setMintInfo] = useState<MintInfo>({
-    fetchFormRemote: false,
-    progressRate: 0,
-  });
-
-  // mint amount
-  const [mintAmount, setMintAmount] = useState(1);
-
-  const [open, setOpen] = React.useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [logMsg404, setLogMsg404] = useState("");
 
   let diamonds = [
     "A2_FrancescoPetrarca.webp",
@@ -86,55 +82,47 @@ export default function Tab1Content() {
     "C2_VitruvianMan.jpg",
   ];
 
-  const handleIncrement = () => {
-    if (mintAmount < 5) {
-      setMintAmount(mintAmount + 1);
-      return;
+  const [open, setOpen] = React.useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [logMsg404, setLogMsg404] = useState("");
+
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+
+  // @ts-ignore
+  const [totalMinted, setTotalMinted] = React.useState(0n);
+  const { isConnected } = useAccount();
+
+  const {
+    data: hash,
+    writeContract: mint,
+    isPending: isMintLoading,
+    isSuccess: isMintStarted,
+    error: mintError,
+  } = useWriteContract();
+
+  const { data: totalSupplyData } = useReadContract({
+    ...contractConfig,
+    functionName: "totalSupply",
+  });
+
+  const {
+    data: txData,
+    isSuccess: txSuccess,
+    error: txError,
+  } = useWaitForTransactionReceipt({
+    hash,
+    query: {
+      enabled: !!hash,
+    },
+  });
+  React.useEffect(() => {
+    if (totalSupplyData) {
+      setTotalMinted(totalSupplyData);
     }
+  }, [totalSupplyData]);
 
-    let jumpAmt = 5;
-    if (mintAmount == 5) {
-      jumpAmt = 10;
-    } else if (mintAmount == 10) {
-      jumpAmt = 20;
-    } else if (mintAmount == 20) {
-      jumpAmt = 50;
-    } else if (mintAmount == 50) {
-      jumpAmt = 100;
-    } else if (mintAmount == 100) {
-      jumpAmt = 500;
-    } else if (mintAmount > 500) {
-      return;
-    }
-    setMintAmount(jumpAmt);
-  };
-
-  const handleDecrement = () => {
-    if (mintAmount >= 2) {
-      setMintAmount(mintAmount - 1);
-    }
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-      } catch (error) {
-        let msg = "Error: Fail to fetch data from  RPC. \n";
-        if (error instanceof Error) {
-          msg = msg + error.message;
-        }
-
-        setRpcErrorInfo({ isRpcError: true, errorMsg: msg });
-      }
-    };
-
-    // Only execute fetchData if running in the browser
-    if (typeof window !== "undefined") {
-      fetchData().catch((r) => {
-        console.error("Sorry, I need window to run." + r);
-      });
-    }
-  }, []);
+  const isMinted = txSuccess;
 
   function quickToast(title: string, description: string) {
     toast({
@@ -181,93 +169,69 @@ export default function Tab1Content() {
       <div className="mt-4 mb-2 text-2xl">
         Fair Mint
         {!isMainnet && (
-          <span className="text-pink-400 text-lg">&nbsp;Artela Testnet</span>
+          <span className="text-rose-600 text-lg">&nbsp;Artela Testnet</span>
         )}
       </div>
       <div className="flex flex-col">
-        {!rpcErrorInfo.isRpcError && (
-          <div>
-            {mintInfo.fetchFormRemote && mintInfo.freemintIsOpen && (
-              <div className="flex justify-center text-gray-400">
-                Minted Count：2,360
-              </div>
-            )}
-
-            <div className="flex justify-center  text-gray-400">
-              Round Supply：10k
-            </div>
-
+        <div>
+          {mintError && (
             <div className="flex justify-center text-gray-400">
-              Period：15 - 31 May
+              Error: {mintError.message}
             </div>
+          )}
+          {txError && (
             <div className="flex justify-center text-gray-400">
-              Price: from 5 to 20 ART
-              {/*<Popover>*/}
-              {/*  <PopoverTrigger className="text-gray-400">*/}
-              {/*    <QuestionMarkCircledIcon className="ml-2 text-yellow-500" />*/}
-              {/*  </PopoverTrigger>*/}
-              {/*  <PopoverContent>*/}
-              {/*   -*/}
-              {/*  </PopoverContent>*/}
-              {/*</Popover>*/}
+              Error: {txError.message}
             </div>
-            <div className="flex items-center justify-center ">
-              <Progress value={23.2} />
-              <div className=" text-gray-400">&nbsp;{23.2}%</div>
+          )}
+
+          <div className="flex justify-center text-gray-400">
+            Minted Count：{Number(totalMinted)}
+          </div>
+
+          <div className="flex justify-center  text-gray-400">
+            Round Supply：10k
+          </div>
+
+          <div className="flex justify-center text-gray-400">
+            Period：15 - 31 May
+          </div>
+          <div className="flex justify-center text-gray-400">
+            Price: from 5 to 20 ART
+            {/*<Popover>*/}
+            {/*  <PopoverTrigger className="text-gray-400">*/}
+            {/*    <QuestionMarkCircledIcon className="ml-2 text-yellow-500" />*/}
+            {/*  </PopoverTrigger>*/}
+            {/*  <PopoverContent>*/}
+            {/*   -*/}
+            {/*  </PopoverContent>*/}
+            {/*</Popover>*/}
+          </div>
+          <div className="flex items-center justify-center ">
+            <Progress value={Number(totalMinted) / 10000} />
+            <div className=" text-gray-400">
+              &nbsp;{Number(totalMinted) / 10000}%
             </div>
           </div>
-        )}
+        </div>
 
         <div className="flex flex-col mt-3">
-          {"wallet?.account?.address" && (
-            <>
-              {/*mint amount start*/}
-              {/*<div className="flex mb-2 items-center">*/}
-              {/*  <div className="text-lg ">Mint Amount: &nbsp;</div>*/}
-
-              {/*  <Button*/}
-              {/*    variant={'outline'}*/}
-              {/*    className="focus:outline-none text-2xl"*/}
-              {/*    onClick={handleDecrement}*/}
-              {/*  >*/}
-              {/*    -*/}
-              {/*  </Button>*/}
-              {/*  <div className="mx-3 text-xl"> {mintAmount} </div>*/}
-              {/*  <Button*/}
-              {/*    variant={'outline'}*/}
-              {/*    className="focus:outline-none text-2xl"*/}
-              {/*    onClick={handleIncrement}*/}
-              {/*  >*/}
-              {/*    +*/}
-              {/*  </Button>*/}
-              {/*</div>*/}
-              {/*mint amount end*/}
-
-              <Button
-                size={"lg"}
-                variant={"default"}
-                onClick={() => {
-                  quickToast("Stay tuned.", "");
-                }}
-              >
-                Fair Mint
-              </Button>
-            </>
-          )}
-          {!"wallet?.account?.address" && (
+          {mounted && isConnected && !isMinted && (
             <Button
-              variant={"secondary"}
+              variant={"default"}
+              disabled={!mint || isMintLoading || isMintStarted}
               size="lg"
               color="primary"
-              onClick={() => {
-                // if (!tonConnectUi.connected) {
-                //   return tonConnectUi.openModal();
-                // } else {
-                //   return tonConnectUi.sendTransaction(tx);
-                // }
-              }}
+              onClick={() =>
+                mint?.({
+                  ...contractConfig,
+                  functionName: "mint",
+                })
+              }
             >
-              Connect Wallet to Fair Mint
+              {isMintLoading && "Waiting for approval"}
+              {isMintStarted && "Minting..."}
+              {!isMintLoading && !isMintStarted && "Fair Mint"}
             </Button>
           )}
         </div>
