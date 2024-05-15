@@ -257,7 +257,7 @@ export default function Tab1Content() {
               size="lg"
               color="primary"
             >
-              Processing
+              -
             </Button>
           )}
         </div>

@@ -15,12 +15,7 @@ export default function Header404() {
     );
   }
   function removeURLParameters() {
-    if (
-      window &&
-      window.location &&
-      window.history &&
-      window.history.replaceState
-    ) {
+    if (window && window.location) {
       // 获取核心URL部分
       var coreURL =
         window.location.protocol +
@@ -28,7 +23,10 @@ export default function Header404() {
         window.location.host +
         window.location.pathname;
       // 使用history.replaceState来修改URL，保持当前页面状态
-      window.history.replaceState(null, "", coreURL);
+      // window.history.replaceState(null, "", coreURL);
+      if (window.location.href !== coreURL) {
+        window.location.href = coreURL;
+      }
     }
   }
 
@@ -50,7 +48,7 @@ export default function Header404() {
           <p className="text-md">ART-404</p>
         </div>
       </div>
-      <div className="flex-item ml-auto" onClick={removeURLParameters}>
+      <div className="flex-item ml-auto">
         <ConnectButton
           accountStatus={{
             smallScreen: "avatar",
