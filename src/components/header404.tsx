@@ -2,6 +2,12 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 
 export default function Header404() {
   const router = useRouter();
@@ -48,7 +54,32 @@ export default function Header404() {
           <p className="text-md">ART-404</p>
         </div>
       </div>
-      <div className="flex-item ml-auto">
+      <div className="flex flex-item ml-auto">
+        <Popover>
+          <PopoverTrigger className="text-gray-400 mr-2">
+            <QuestionMarkCircledIcon className="ml-2 text-white" />
+          </PopoverTrigger>
+          <PopoverContent className={"m-2 p-2"}>
+            <p className={"text-xl text-red-500 mb-3"}>
+              Wallet Connect at Mobile Phone have a lot of compatibility issues.
+            </p>
+            <ul className={"mb-3"}>
+              <li>We recommend using Coinbase Wallet on your phone.</li>
+            </ul>
+            <div>
+              {" "}
+              If you insist on using MetaMask on your phone, then try this,
+              there is no guarantee of results.
+            </div>
+
+            <Image
+              src="/compatibilityissues.png"
+              height={360}
+              width={360}
+              alt="pop"
+            />
+          </PopoverContent>
+        </Popover>
         <ConnectButton
           accountStatus={{
             smallScreen: "avatar",

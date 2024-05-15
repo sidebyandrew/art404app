@@ -4,13 +4,13 @@
 
 // export const BASE_URL: string = 'http://localhost:3000';
 // export const BASE_URL: string = 'https://staging.art404app.pages.dev';
-export const BASE_URL: string = "https://art404app.pages.dev";
+export const BASE_URL: string = "https://art-404.xyz/";
+export const PROD_BASE_URL: string = "https://art-404.xyz/";
 export const isMainnet: boolean = false;
 export const isStayTuned: boolean = false;
 
 export const appName404: string = "art404app";
 export const projectId404: string = "bb84875c82bab72719dba296deb14d33";
-export const prodUrl: string = "https://art404app.pages.dev";
 
 export const art_404_contract_address: `0x${string}` =
   "0x2F3Ba6f99CF956dD24fe565537c4969a15e70f9D";

@@ -2,7 +2,7 @@ import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 
 import { cookieStorage, createStorage } from "wagmi";
 import { defineChain } from "viem";
-import { appName404, projectId404 } from "@/constant/config404";
+import { appName404, PROD_BASE_URL, projectId404 } from "@/constant/config404";
 
 export const projectId = projectId404;
 if (!projectId) throw new Error("Project ID is not defined");
@@ -10,7 +10,7 @@ if (!projectId) throw new Error("Project ID is not defined");
 export const metadata = {
   name: appName404,
   description: "ART 404",
-  url: "https://art404app.pages.dev",
+  url: PROD_BASE_URL,
   icons: ["https://avatars.githubusercontent.com/u/37784886"],
 };
 

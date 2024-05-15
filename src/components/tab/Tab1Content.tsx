@@ -218,14 +218,6 @@ export default function Tab1Content() {
           </div>
           <div className="flex justify-center text-gray-400">
             Price: From 5 to 20 ART
-            {/*<Popover>*/}
-            {/*  <PopoverTrigger className="text-gray-400">*/}
-            {/*    <QuestionMarkCircledIcon className="ml-2 text-yellow-500" />*/}
-            {/*  </PopoverTrigger>*/}
-            {/*  <PopoverContent>*/}
-            {/*   -*/}
-            {/*  </PopoverContent>*/}
-            {/*</Popover>*/}
           </div>
           <div className="flex items-center justify-center ">
             <Progress value={Number(totalMinted) / max_supply_404} />
