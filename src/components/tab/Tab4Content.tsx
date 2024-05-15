@@ -1,9 +1,20 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+"use client";
+import React, { useState } from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
-import { ClipboardCopyIcon } from '@radix-ui/react-icons';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { ClipboardCopyIcon } from "@radix-ui/react-icons";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import {
   Table,
@@ -14,20 +25,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { BASE_URL, page_size } from '@/constant/config404';
-import { ActionInfo, Result404, User404 } from '@/utils/interface404';
+} from "@/components/ui/table";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { BASE_URL, page_size } from "@/constant/config404";
+import { ActionInfo, Result404, User404 } from "@/utils/interface404";
 import {
   ACTION_LIST_FOUND,
   REF_REWARD_BUY,
   REF_REWARD_MINT,
-  REF_USER_LIST_FOUND,
-  REWARD_SUM_SUCCESS,
-} from '@/utils/static404';
-import { ToastAction } from '@/components/ui/toast';
-import { toast } from '@/components/ui/use-toast';
+} from "@/utils/static404";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/components/ui/use-toast";
 import {
   Pagination,
   PaginationContent,
@@ -35,66 +44,62 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination';
-import { Drawer, DrawerContent } from '@/components/ui/drawer';
+} from "@/components/ui/pagination";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 
 const rules = [
   {
-    title: 'Invite friends with your personal link.',
-    description: '2 points per friend. (Max 1000 points)   (Note: Invite friends award at Testnet will be kept.)',
+    title: "Invite friends with your personal link.",
+    description:
+      "2 points per friend. (Max 1000 points)   (Note: Invite friends award at Testnet will be kept.)",
   },
   {
-    title: 'Your friends mint a A404! (only Mainnet)',
-    description: 'If your friends mint 1 A404, you will get 50 points reward.',
+    title: "Your friends mint a A404! (only Mainnet)",
+    description: "If your friends mint 1 A404, you will get 50 points reward.",
   },
   {
-    title: 'Your friends buy a A404! (only Mainnet)',
-    description: 'If your friends buy 1 A404, you will get 5 points reward.',
+    title: "Your friends buy a A404! (only Mainnet)",
+    description: "If your friends buy 1 A404, you will get 5 points reward.",
   },
 ];
 
 export default function Tab4Airdrop() {
-
   // /* todo remove tma */
   // const tgInitData = useInitData();
   //
-  const tgInitData = { user: { id: 5499157826, username: '' } };
+  const tgInitData = { user: { id: 5499157826, username: "" } };
 
   const [userData, setUserData] = useState<User404>({
-    tgId: '',
-    tgUsername: '',
-    refCode: '',
-    refTgId: '',
-    refTgUsername: '',
+    tgId: "",
+    tgUsername: "",
+    refCode: "",
+    refTgId: "",
+    refTgUsername: "",
   });
-  const [refActionReward, setRefActionReward] = useState('');
+  const [refActionReward, setRefActionReward] = useState("");
   const [rewardPageNumber, setRewardPageNumber] = useState(1);
   const [rewardList, setRewardList] = useState<ActionInfo[]>([]);
-  const [rewardPageChanged, setRewardPageChanged] = useState('');
+  const [rewardPageChanged, setRewardPageChanged] = useState("");
   const [open, setOpen] = React.useState(false);
   const handleCopy = async () => {
-    try {
-      if (userData && userData.refCode) {
-        let refLink = `https://t.me/art404bot?start=${userData.refCode}`;
-        await navigator.clipboard.writeText(refLink);
-        quickToast('Copied!', refLink);
-      } else {
-        quickToast('Error!', 'please reload and try again!');
-      }
-    } catch (error) {
-      console.error('Fail to copy referral code：', error);
-    }
+    // try {
+    //   if (userData && userData.refCode) {
+    //     let refLink = `https://t.me/art404bot?start=${userData.refCode}`;
+    //     await navigator.clipboard.writeText(refLink);
+    //     quickToast('Copied!', refLink);
+    //   } else {
+    //     quickToast('Error!', 'please reload and try again!');
+    //   }
+    // } catch (error) {
+    //   console.error('Fail to copy referral code：', error);
+    // }
   };
-
 
   function quickToast(title: string, description: string) {
     toast({
       title: title,
       description: description,
-      action: (
-        <ToastAction
-          altText="OK">OK</ToastAction>
-      ),
+      action: <ToastAction altText="OK">OK</ToastAction>,
     });
   }
 
@@ -118,66 +123,65 @@ export default function Tab4Airdrop() {
     return result;
   }
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        let tgId = tgInitData?.user?.id;
-        let tgUsername = tgInitData?.user?.username;
-        if (!tgUsername) {
-          tgUsername = '' + tgId;
-        }
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       let tgId = tgInitData?.user?.id;
+  //       let tgUsername = tgInitData?.user?.username;
+  //       if (!tgUsername) {
+  //         tgUsername = "" + tgId;
+  //       }
+  //
+  //       let urlWithParams = `${BASE_URL}/api/user?tgId=${tgId}&tgUsername=${tgUsername}&access404=error_code_404`;
+  //       const response = await fetch(urlWithParams);
+  //       if (!response.ok) {
+  //         console.error(urlWithParams);
+  //         return;
+  //       }
+  //       const responseData = await response.json<Result404>();
+  //       if (responseData.success && responseData.code == REF_USER_LIST_FOUND) {
+  //         setUserData(responseData.result);
+  //       }
+  //     } catch (error) {
+  //       if (error instanceof Error) {
+  //         console.error(error.message);
+  //       }
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   }
+  //
+  //   fetchData();
+  // }, []);
 
-        let urlWithParams = `${BASE_URL}/api/user?tgId=${tgId}&tgUsername=${tgUsername}&access404=error_code_404`;
-        const response = await fetch(urlWithParams);
-        if (!response.ok) {
-          console.error(urlWithParams);
-          return;
-        }
-        const responseData = await response.json<Result404>();
-        if (responseData.success && responseData.code == REF_USER_LIST_FOUND) {
-          setUserData(responseData.result);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
-        console.error('Error fetching data:', error);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        let tgId = tgInitData?.user?.id;
-        let urlWithParams = `${BASE_URL}/api/referral/sum_reward?tgId=${tgId}&access404=error_code_404`;
-        const response = await fetch(urlWithParams);
-        if (!response.ok) {
-          console.error(urlWithParams);
-          return;
-        }
-        const responseData = await response.json<Result404>();
-        if (responseData.success && responseData.code == REWARD_SUM_SUCCESS) {
-          setRefActionReward(responseData.result);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
-        console.error('Error fetching data:', error);
-      }
-    }
-
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       let tgId = tgInitData?.user?.id;
+  //       let urlWithParams = `${BASE_URL}/api/referral/sum_reward?tgId=${tgId}&access404=error_code_404`;
+  //       const response = await fetch(urlWithParams);
+  //       if (!response.ok) {
+  //         console.error(urlWithParams);
+  //         return;
+  //       }
+  //       const responseData = await response.json<Result404>();
+  //       if (responseData.success && responseData.code == REWARD_SUM_SUCCESS) {
+  //         setRefActionReward(responseData.result);
+  //       }
+  //     } catch (error) {
+  //       if (error instanceof Error) {
+  //         console.error(error.message);
+  //       }
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   }
+  //
+  //   fetchData();
+  // }, []);
 
   async function fetchRewardList(myOpenPageNumber: number) {
-    console.info('call fetchRewardList');
+    console.info("call fetchRewardList");
     try {
-      let loginWallet = '   loginWallet';
+      let loginWallet = "   loginWallet";
       if (loginWallet) {
         let tgId = tgInitData?.user?.id;
         let urlWithParams = `${BASE_URL}/api/referral/reward_list?tgId=${tgId}&pagination=${myOpenPageNumber}&access404=error_code_404`;
@@ -193,26 +197,26 @@ export default function Tab4Airdrop() {
         }
       }
     } catch (error) {
-      let msg = 'Network Error: /api/referral/reward_list. \n';
+      let msg = "Network Error: /api/referral/reward_list. \n";
       if (error instanceof Error) {
         msg = msg + error.message;
       }
-      quickToast('Network Error', msg);
-      console.error('Error fetching data:', msg);
+      quickToast("Network Error", msg);
+      console.error("Error fetching data:", msg);
     }
   }
-
-  useEffect(() => {
-    fetchRewardList(rewardPageNumber);
-  }, [rewardPageChanged]);
+  //
+  // useEffect(() => {
+  //   fetchRewardList(rewardPageNumber);
+  // }, [rewardPageChanged]);
 
   function convertActionType(type: string | undefined) {
     if (type == REF_REWARD_MINT) {
-      return 'Mint';
+      return "Mint";
     } else if (type == REF_REWARD_BUY) {
-      return 'Buy';
+      return "Buy";
     } else {
-      return '-';
+      return "-";
     }
   }
 
@@ -224,9 +228,7 @@ export default function Tab4Airdrop() {
         <TableCaption></TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="">
-              #
-            </TableHead>
+            <TableHead className="">#</TableHead>
             <TableHead>Points</TableHead>
             <TableHead>Friends</TableHead>
             <TableHead className="text-center">Action</TableHead>
@@ -235,17 +237,22 @@ export default function Tab4Airdrop() {
         <TableBody>
           <TableRow>
             <TableCell className="font-medium">
-              <Image src="/icon/best-icon.jpg" height={36} width={36}
-                     alt="pop" />
+              <Image
+                src="/icon/best-icon.jpg"
+                height={36}
+                width={36}
+                alt="pop"
+              />
             </TableCell>
-            <TableCell
-              className=" text-center text-nowrap">{getTotalRefPoints()}</TableCell>
+            <TableCell className=" text-center text-nowrap">
+              {getTotalRefPoints()}
+            </TableCell>
             <TableCell className="text-center">
-              {userData ? userData.refCount : '-'}
+              {userData ? userData.refCount : "-"}
             </TableCell>
             <TableCell className="text-center">
               <Button
-                variant={'outline'}
+                variant={"outline"}
                 onClick={() => {
                   setOpen(!open);
                 }}
@@ -264,7 +271,7 @@ export default function Tab4Airdrop() {
       {/*  Points End */}
 
       {/* card */}
-      <Card className={''}>
+      <Card className={""}>
         <CardHeader>
           <CardTitle>Rules for Fair Mint Season</CardTitle>
           <CardDescription>How to earn 404 honor points?</CardDescription>
@@ -291,7 +298,8 @@ export default function Tab4Airdrop() {
         </CardContent>
         <CardFooter>
           <Button className="w-full" onClick={handleCopy}>
-            <ClipboardCopyIcon className="mr-2 h-4 w-4" /> Copy Your Referral Link
+            <ClipboardCopyIcon className="mr-2 h-4 w-4" /> Copy Your Referral
+            Link
           </Button>
         </CardFooter>
       </Card>
@@ -301,36 +309,35 @@ export default function Tab4Airdrop() {
       <div className="flex w-full flex-col pb-5">&nbsp;</div>
       <Table>
         <TableCaption>
-          <div className={'p-1'}>Sort by create date in reverse order.</div>
+          <div className={"p-1"}>Sort by create date in reverse order.</div>
 
           {/*pagination */}
-          <Pagination className={'p-2'}>
+          <Pagination className={"p-2"}>
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious onClick={
-                  async () => {
+                <PaginationPrevious
+                  onClick={async () => {
                     if (rewardPageNumber > 1) {
                       await fetchRewardList(rewardPageNumber - 1);
                     }
-                  }
-                } />
+                  }}
+                />
               </PaginationItem>
               <PaginationItem>
                 <PaginationLink isActive>{rewardPageNumber}</PaginationLink>
               </PaginationItem>
               <PaginationItem>
-                <PaginationNext onClick={
-                  async () => {
+                <PaginationNext
+                  onClick={async () => {
                     if (rewardList && rewardList.length == page_size) {
                       await fetchRewardList(rewardPageNumber + 1);
                     }
-                  }
-                } />
+                  }}
+                />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
           {/*pagination end*/}
-
         </TableCaption>
         <TableHeader>
           <TableRow>
@@ -341,16 +348,17 @@ export default function Tab4Airdrop() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow key={'-1default'}>
+          <TableRow key={"-1default"}>
             <TableCell className="">-</TableCell>
-            <TableCell
-              className=" text-sm">#Invited</TableCell>
+            <TableCell className=" text-sm">#Invited</TableCell>
             <TableCell>Referral</TableCell>
             <TableCell>{getRefFriendsPoints()}</TableCell>
           </TableRow>
           {rewardList.map((action, index) => (
             <TableRow key={index}>
-              <TableCell className="">{(rewardPageNumber - 1) * page_size + index + 1}</TableCell>
+              <TableCell className="">
+                {(rewardPageNumber - 1) * page_size + index + 1}
+              </TableCell>
               <TableCell className=" text-sm">{action.tgUsername}</TableCell>
               <TableCell>{convertActionType(action.targetType)}</TableCell>
               <TableCell>{action.targetReward}</TableCell>
@@ -365,7 +373,6 @@ export default function Tab4Airdrop() {
       </Table>
       {/*table end*/}
 
-
       {/*drawer*/}
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerContent className="p-6 pb-20">
@@ -377,19 +384,18 @@ export default function Tab4Airdrop() {
 
       {/*drawer end*/}
 
-
       <div className="mt-20 mb-20 text-gray-600 text-center">&nbsp;</div>
       <div className="mt-20  text-gray-600 text-center">
         <Popover>
-          <PopoverTrigger className="text-gray-400">A friend in need is a friend indeed.</PopoverTrigger>
-          <PopoverContent
-            className={'w-[300px] break-all'}>
-            <div className={'break-all'}></div>
+          <PopoverTrigger className="text-gray-400">
+            A friend in need is a friend indeed.
+          </PopoverTrigger>
+          <PopoverContent className={"w-[300px] break-all"}>
+            <div className={"break-all"}></div>
           </PopoverContent>
         </Popover>
       </div>
       <div className="flex w-full flex-col pb-10">&nbsp;</div>
     </div>
   );
-};
-
+}

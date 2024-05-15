@@ -14,6 +14,7 @@ import {
   bigNumber18,
   isMainnet,
   max_supply_404,
+  max_supply_404_str,
 } from "@/constant/config404";
 import {
   Drawer,
@@ -206,7 +207,7 @@ export default function Tab1Content() {
           </div>
 
           <div className="flex justify-center  text-gray-400">
-            Round Supply：10k
+            Max Supply：{max_supply_404_str}
           </div>
 
           <div className="flex justify-center text-gray-400">
@@ -244,7 +245,7 @@ export default function Tab1Content() {
 
           {!(mounted && isConnected && !isMinted) && (
             <Button
-              variant={"secondary"}
+              variant={"blue"}
               disabled={!(mounted && isConnected && isMinted)}
               size="lg"
               color="primary"
@@ -253,7 +254,10 @@ export default function Tab1Content() {
               }}
             >
               {!isConnected && "Connect Wallet"}
-              {mounted && isConnected && isMinted && "Mint Success! Try Again!"}
+              {mounted &&
+                isConnected &&
+                isMinted &&
+                "Mint Success! One More Time!"}
             </Button>
           )}
         </div>

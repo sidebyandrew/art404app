@@ -18,6 +18,7 @@ export const art_404_contract_address: `0x${string}` =
 // @ts-ignore
 export const bigNumber18: bigint = 1000000000000000000n;
 export const max_supply_404: number = 200000;
+export const max_supply_404_str: string = "200,000";
 
 export const page_size: number = 10;
 
