@@ -102,10 +102,6 @@ export default function Tab1Content() {
   });
 
   console.info("==============================");
-  console.info("==============================");
-  console.info("==============================");
-  console.info(data);
-  console.info(data);
   console.info(data);
   console.info("==============================");
   console.info("==============================");
@@ -195,12 +191,12 @@ export default function Tab1Content() {
       <div className="flex flex-col">
         <div>
           {mintError && (
-            <div className="flex justify-center text-gray-400">
+            <div className="flex justify-center text-yellow-800">
               Error: {mintError.message}
             </div>
           )}
           {txError && (
-            <div className="flex justify-center text-gray-400">
+            <div className="flex justify-center text-yellow-800">
               Error: {txError.message}
             </div>
           )}
@@ -217,12 +213,16 @@ export default function Tab1Content() {
             Period：18 May - 20 June
           </div>
           <div className="flex justify-center text-gray-400">
-            Price: From 5 to 20 ART
+            Price: 0.001 ART at Testnet
           </div>
           <div className="flex items-center justify-center ">
-            <Progress value={Number(totalMinted) / max_supply_404} />
+            <Progress
+              value={Number(
+                ((Number(totalMinted) / max_supply_404) * 100).toFixed(3),
+              )}
+            />
             <div className=" text-gray-400">
-              &nbsp;{Number(totalMinted) / max_supply_404}%
+              &nbsp;{((Number(totalMinted) / max_supply_404) * 100).toFixed(3)}%
             </div>
           </div>
         </div>
@@ -245,11 +245,15 @@ export default function Tab1Content() {
           {!(mounted && isConnected && !isMinted) && (
             <Button
               variant={"secondary"}
-              disabled={true}
+              disabled={!(mounted && isConnected && isMinted)}
               size="lg"
               color="primary"
+              onClick={() => {
+                window.location.reload();
+              }}
             >
-              -
+              {!isConnected && "Connect Wallet"}
+              {mounted && isConnected && isMinted && "Mint Success! Try Again!"}
             </Button>
           )}
         </div>
