@@ -8,8 +8,16 @@ export const BASE_URL: string = "https://art404app.pages.dev";
 export const isMainnet: boolean = false;
 export const isStayTuned: boolean = false;
 
+export const appName404: string = "art404app";
+export const projectId404: string = "bb84875c82bab72719dba296deb14d33";
+export const prodUrl: string = "https://art404app.pages.dev";
+
 export const art_404_contract_address: `0x${string}` =
-  "0x86fbbb1254c39602a7b067d5ae7e5c2bdfd61a30";
+  "0x2F3Ba6f99CF956dD24fe565537c4969a15e70f9D";
+
+// @ts-ignore
+export const bigNumber18: bigint = 1000000000000000000n;
+export const max_supply_404: number = 200000;
 
 export const page_size: number = 10;
 

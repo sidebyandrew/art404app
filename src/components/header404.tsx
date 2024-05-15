@@ -15,14 +15,18 @@ export default function Header404() {
     );
   }
   function removeURLParameters() {
-    if (window && window.history) {
+    if (
+      window &&
+      window.location &&
+      window.history &&
+      window.history.replaceState
+    ) {
       // 获取核心URL部分
       var coreURL =
         window.location.protocol +
         "//" +
         window.location.host +
         window.location.pathname;
-
       // 使用history.replaceState来修改URL，保持当前页面状态
       window.history.replaceState(null, "", coreURL);
     }

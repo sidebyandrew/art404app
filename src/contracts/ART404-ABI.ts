@@ -12,6 +12,11 @@ export const abi = [
         type: "string",
       },
       {
+        internalType: "string",
+        name: "baseURI_",
+        type: "string",
+      },
+      {
         internalType: "uint8",
         name: "decimals_",
         type: "uint8",
@@ -27,9 +32,9 @@ export const abi = [
         type: "address",
       },
       {
-        internalType: "address",
-        name: "initialMintRecipient_",
-        type: "address",
+        internalType: "uint256",
+        name: "mintFee_",
+        type: "uint256",
       },
     ],
     stateMutability: "nonpayable",
@@ -684,6 +689,39 @@ export const abi = [
   },
   {
     inputs: [],
+    name: "maxTotalSupplyERC20",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "mint",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "mintFee",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "minted",
     outputs: [
       {
@@ -911,6 +949,19 @@ export const abi = [
       },
     ],
     name: "setERC721TransferExempt",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "value_",
+        type: "uint256",
+      },
+    ],
+    name: "setMintFee",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

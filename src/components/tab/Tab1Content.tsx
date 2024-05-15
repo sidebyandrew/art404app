@@ -9,7 +9,12 @@ import {
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
-import { art_404_contract_address, isMainnet } from "@/constant/config404";
+import {
+  art_404_contract_address,
+  bigNumber18,
+  isMainnet,
+  max_supply_404,
+} from "@/constant/config404";
 import {
   Drawer,
   DrawerClose,
@@ -87,7 +92,7 @@ export default function Tab1Content() {
   React.useEffect(() => setMounted(true), []);
 
   // @ts-ignore
-  const [totalMinted, setTotalMinted] = React.useState(-1n);
+  const [totalMinted, setTotalMinted] = React.useState(0n);
   const { isConnected } = useAccount();
   console.info("isConnected", isConnected);
 
@@ -98,6 +103,10 @@ export default function Tab1Content() {
     isSuccess: isMintStarted,
     error: mintError,
   } = useWriteContract();
+
+  // ===
+
+  // ===
 
   const { data: totalSupplyData } = useReadContract({
     ...contractConfig,
@@ -118,7 +127,7 @@ export default function Tab1Content() {
   });
   React.useEffect(() => {
     if (totalSupplyData) {
-      setTotalMinted(totalSupplyData);
+      setTotalMinted(totalSupplyData / bigNumber18);
     }
   }, [totalSupplyData]);
 
@@ -208,9 +217,9 @@ export default function Tab1Content() {
             {/*</Popover>*/}
           </div>
           <div className="flex items-center justify-center ">
-            <Progress value={Number(totalMinted) / 10000} />
+            <Progress value={Number(totalMinted) / max_supply_404} />
             <div className=" text-gray-400">
-              &nbsp;{Number(totalMinted) / 10000}%
+              &nbsp;{Number(totalMinted) / max_supply_404}%
             </div>
           </div>
         </div>

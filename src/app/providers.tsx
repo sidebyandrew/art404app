@@ -11,7 +11,8 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProviderProps } from "next-themes/dist/types";
-import { sepolia } from "wagmi/chains";
+import { artela } from "@/config";
+import { appName404, projectId404 } from "@/constant/config404";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -23,8 +24,8 @@ export interface ProvidersProps {
 //
 //
 //
-// const projectId = "bb84875c82bab72719dba296deb14d33";
-// const appName = "art404app";
+// const projectId = "";
+// const appName = "";
 //
 // const connectors = connectorsForWallets(
 //   [
@@ -58,10 +59,9 @@ export interface ProvidersProps {
 // });
 
 const config = getDefaultConfig({
-  appName: "art404app",
-  projectId: "bb84875c82bab72719dba296deb14d33",
-  // chains: [sepolia, mainnet, polygon, base],
-  chains: [sepolia],
+  appName: appName404,
+  projectId: projectId404,
+  chains: [artela],
   ssr: true,
 });
 
