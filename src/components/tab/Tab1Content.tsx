@@ -8,9 +8,8 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import Autoplay from "embla-carousel-autoplay";
-import { isMainnet } from "@/constant/config404";
+import { art_404_contract_address, isMainnet } from "@/constant/config404";
 import {
   Drawer,
   DrawerClose,
@@ -60,7 +59,7 @@ interface RpcErrorInfo {
 }
 
 const contractConfig = {
-  address: "0x86fbbb1254c39602a7b067d5ae7e5c2bdfd61a30",
+  address: art_404_contract_address,
   abi,
 } as const;
 
@@ -72,7 +71,6 @@ export default function Tab1Content() {
 
   let diamonds = [
     "A2_FrancescoPetrarca.webp",
-
     "A3_GiovanniBoccaccio.webp",
     "A4_Michelangelo.jpg",
     "Art404.jpg",
@@ -83,15 +81,15 @@ export default function Tab1Content() {
   ];
 
   const [open, setOpen] = React.useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [logMsg404, setLogMsg404] = useState("");
 
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
 
   // @ts-ignore
-  const [totalMinted, setTotalMinted] = React.useState(0n);
+  const [totalMinted, setTotalMinted] = React.useState(-1n);
   const { isConnected } = useAccount();
+  console.info("isConnected", isConnected);
 
   const {
     data: hash,
@@ -105,6 +103,8 @@ export default function Tab1Content() {
     ...contractConfig,
     functionName: "totalSupply",
   });
+
+  console.info("totalSupplyData", totalSupplyData);
 
   const {
     data: txData,
@@ -194,10 +194,10 @@ export default function Tab1Content() {
           </div>
 
           <div className="flex justify-center text-gray-400">
-            Period：15 - 31 May
+            Period：18 May - 20 June
           </div>
           <div className="flex justify-center text-gray-400">
-            Price: from 5 to 20 ART
+            Price: From 5 to 20 ART
             {/*<Popover>*/}
             {/*  <PopoverTrigger className="text-gray-400">*/}
             {/*    <QuestionMarkCircledIcon className="ml-2 text-yellow-500" />*/}
@@ -232,6 +232,17 @@ export default function Tab1Content() {
               {isMintLoading && "Waiting for approval"}
               {isMintStarted && "Minting..."}
               {!isMintLoading && !isMintStarted && "Fair Mint"}
+            </Button>
+          )}
+
+          {!(mounted && isConnected && !isMinted) && (
+            <Button
+              variant={"secondary"}
+              disabled={true}
+              size="lg"
+              color="primary"
+            >
+              Connect Wallet to Fair Mint
             </Button>
           )}
         </div>

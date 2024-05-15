@@ -23,15 +23,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  BASE_URL,
-  pink_market_address,
-  pink_market_fee_denominator,
-  pink_market_fee_numerator,
-} from "@/constant/config404";
-import { v4 as uuidv4 } from "uuid";
 import { decimalFriendly } from "@/utils/util404";
-import { SellOrderInfo } from "@/utils/interface404";
 import { useRouter } from "next/navigation";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import {
@@ -42,27 +34,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { BeatLoader } from "react-spinners";
-import { ToastAction } from "@/components/ui/toast";
-import { toast } from "@/components/ui/use-toast";
-
-function generateUnique64BitInteger(): string {
-  const uuid: string = uuidv4().replace(/-/g, "");
-  const uuid64Bit: string = uuid.substr(0, 16);
-  return BigInt("0x" + uuid64Bit).toString();
-}
 
 export default function Page({ params }: { params: { lang: string } }) {
   const router = useRouter();
 
-  /* todo remove tma */
-  // const tgInitData = useInitData();
-
-  const tgInitData = { user: { id: 5499157826, username: "" } };
-
-  let initOrder: SellOrderInfo = {};
-  const [sellOrderInfo, setSellOrderInfo] = useState<SellOrderInfo>(initOrder);
-  const wallet = "useTonWallet()";
-  const [jettonWallet, setJettonWallet] = useState("");
   const [jettonBalance, setJettonBalance] = useState("");
   let [jettonLoading, setJettonLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
@@ -89,123 +64,6 @@ export default function Page({ params }: { params: { lang: string } }) {
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    let rollbackTgId = "";
-    let rollbackExtBizId = "";
-    try {
-      if (!"wallet?.account?.address") {
-        toast({
-          title: "WARN",
-          description: `Please connect your wallet firstly!`,
-          action: <ToastAction altText="Goto schedule to undo">OK</ToastAction>,
-        });
-        return;
-      }
-      if (jettonLoading) {
-        toast({
-          title: "WARN",
-          description: `Please wait the app to load your A404 balance!`,
-          action: <ToastAction altText="Goto schedule to undo">OK</ToastAction>,
-        });
-        return;
-      }
-      if (values.sellAmount && values.sellAmount > parseFloat(jettonBalance)) {
-        toast({
-          title: "ERROR",
-          description: `You cannot sell more than your balance ${jettonBalance}!`,
-          action: <ToastAction altText="Goto schedule to undo">OK</ToastAction>,
-        });
-        return;
-      }
-
-      setProcessing(true);
-      let loginWalletAddress = "wallet?.account?.address";
-      if (loginWalletAddress) {
-        let order: SellOrderInfo = {};
-        order.pinkMarketAddress = pink_market_address;
-
-        if (!jettonWallet) {
-          toast({
-            title: "ERROR!",
-            description: "Cannot find the A404 wallet address!",
-            action: (
-              <ToastAction altText="Goto schedule to undo">OK</ToastAction>
-            ),
-          });
-          return;
-        }
-        order.sellerA404Address = jettonWallet;
-        order.sellAmount = values.sellAmount;
-        order.unitPriceInTon = values.unitPrice;
-        let extBizId = generateUnique64BitInteger();
-        console.info("extBizId", extBizId);
-        order.extBizId = extBizId;
-
-        // ==================== save to DB ====================
-        let tgId = tgInitData?.user?.id;
-        let tgUsername = tgInitData?.user?.username;
-        if (!tgUsername) {
-          tgUsername = "" + tgId;
-        }
-        order.sellerTgId = "" + tgId;
-        order.sellerTgUsername = tgUsername;
-        order.feeNumerator = pink_market_fee_numerator;
-        order.feeDenominator = pink_market_fee_denominator;
-
-        rollbackTgId = order.sellerTgId;
-        rollbackExtBizId = order.extBizId;
-        const res = await fetch(BASE_URL + "/api/pink/sell", {
-          method: "POST",
-          body: JSON.stringify(order),
-          headers: {
-            "content-type": "application/json",
-          },
-        });
-        if (!res.ok) {
-          console.log("Oops! Something is wrong when call API.");
-        }
-        // ==================== save to DB end ====================
-
-        // let sendTransactionRequest = buildTx(order);
-        // setTx(sendTransactionRequest);
-        // let sellTx: SendTransactionResponse = {};
-        // let txCells = Cell.fromBoc(Buffer.from(sellTx.boc, 'base64'));
-        // if (txCells && txCells[0]) {
-        //   let urlWithParams = `${BASE_URL}/api/sell_order/update_state?tgId=${tgId}&extBizId=${order.extBizId}&status=PENDING&access404=error_code_404`;
-        //   const response = await fetch(urlWithParams);
-        //   if (!response.ok) {
-        //     console.error(urlWithParams);
-        //     return;
-        //   }
-        //   setSubmitted(true);
-        // } else {
-        //   console.info('User have not sign the tx!!!!!!');
-        //   console.info(txCells);
-        // }
-      } else {
-        // if (!tonConnectUi.connected) {
-        //   return tonConnectUi.openModal();
-        // } else {
-        //   console.error('Wallet connected, but not have wallet address!');
-        // }
-      }
-      setProcessing(false);
-    } catch (error) {
-      setProcessing(false);
-      if (error instanceof Error) {
-        console.error(error.message);
-        if (error.message.indexOf("TON_CONNECT_SDK_ERROR")) {
-          let urlWithParams = `${BASE_URL}/api/sell_order/update_state?tgId=${rollbackTgId}&extBizId=${rollbackExtBizId}&status=INVALID&access404=error_code_404`;
-          const response = await fetch(urlWithParams);
-          if (!response.ok) {
-            console.error(urlWithParams);
-            return;
-          }
-        }
-      }
-      console.error("Error fetching data:", error);
-    }
-  }
 
   const normalizeInput = (value: any) => {
     if (parseFloat(value) < 0 || value === "-") {
@@ -289,7 +147,7 @@ export default function Page({ params }: { params: { lang: string } }) {
           </Table>
 
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            // onSubmit={form.handleSubmit(onSubmit)}
             className="w-2/3 space-y-6"
           >
             <FormField
