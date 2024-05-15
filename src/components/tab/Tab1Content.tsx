@@ -44,24 +44,12 @@ import { Progress } from "@/components/ui/progress";
 import {
   useAccount,
   useReadContract,
+  useSimulateContract,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
-import { abi } from "@/contracts/contract-abi";
-
-interface MintInfo {
-  fetchFormRemote: boolean;
-  freemintIsOpen?: boolean;
-  freemintMaxSupply?: number;
-  freemintCurrentSupply?: number;
-  freemintTonPrice?: number;
-  progressRate: number;
-}
-
-interface RpcErrorInfo {
-  isRpcError: boolean;
-  errorMsg?: string;
-}
+import { abi } from "@/contracts/ART404-ABI";
+import { parseEther } from "viem";
 
 const contractConfig = {
   address: art_404_contract_address,
@@ -96,17 +84,40 @@ export default function Tab1Content() {
   const { isConnected } = useAccount();
   console.info("isConnected", isConnected);
 
+  // ===
+  const { data } = useSimulateContract({
+    address: art_404_contract_address,
+    abi: [
+      {
+        inputs: [],
+        name: "mint",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function",
+      },
+    ],
+    functionName: "mint",
+    args: [],
+    value: parseEther("0.001"),
+  });
+
+  console.info("==============================");
+  console.info("==============================");
+  console.info("==============================");
+  console.info(data);
+  console.info(data);
+  console.info(data);
+  console.info("==============================");
+  console.info("==============================");
+
+  // ===
   const {
     data: hash,
-    writeContract: mint,
+    writeContract: writeContract,
     isPending: isMintLoading,
     isSuccess: isMintStarted,
     error: mintError,
   } = useWriteContract();
-
-  // ===
-
-  // ===
 
   const { data: totalSupplyData } = useReadContract({
     ...contractConfig,
@@ -228,15 +239,10 @@ export default function Tab1Content() {
           {mounted && isConnected && !isMinted && (
             <Button
               variant={"default"}
-              disabled={!mint || isMintLoading || isMintStarted}
+              disabled={!writeContract || isMintLoading || isMintStarted}
               size="lg"
               color="primary"
-              onClick={() =>
-                mint?.({
-                  ...contractConfig,
-                  functionName: "mint",
-                })
-              }
+              onClick={() => writeContract?.(data!.request)}
             >
               {isMintLoading && "Waiting for approval"}
               {isMintStarted && "Minting..."}
@@ -251,7 +257,7 @@ export default function Tab1Content() {
               size="lg"
               color="primary"
             >
-              Connect Wallet to Fair Mint
+              Processing
             </Button>
           )}
         </div>
