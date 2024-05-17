@@ -49,7 +49,12 @@ export default function Header404() {
       }}
     >
       <div className="flex gap-1 items-center mx-auto">
-        <Image alt="404 logo" height={30} src="/zink50-logo.png" width={30} />
+        <Image
+          alt="404 logo"
+          height={30}
+          src="/zink50-logo-with-round.png"
+          width={30}
+        />
         <div className=" ">
           <p className="text-md">ART-404</p>
         </div>
