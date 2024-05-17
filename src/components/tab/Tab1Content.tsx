@@ -186,7 +186,9 @@ export default function Tab1Content() {
       <div className="mt-4 mb-2 text-2xl">
         Fair Mint
         {!isMainnet && (
-          <span className="text-rose-600 text-lg">&nbsp;Artela Testnet</span>
+          <span className="text-rose-600 text-lg">
+            &nbsp;Artela Testnet&nbsp;&nbsp;
+          </span>
         )}
       </div>
       <div className="flex flex-col">
