@@ -222,7 +222,7 @@ export default function Tab1Content() {
                 ((Number(totalMinted) / max_supply_404) * 100).toFixed(3),
               )}
             />
-            <div className=" text-gray-400">
+            <div className=" text-gray-400 ">
               &nbsp;{((Number(totalMinted) / max_supply_404) * 100).toFixed(3)}%
             </div>
           </div>
