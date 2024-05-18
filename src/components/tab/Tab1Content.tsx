@@ -283,7 +283,7 @@ export default function Tab1Content() {
               {mounted &&
                 isConnected &&
                 isMinted &&
-                "Mint Success! One More Time!" + erc721BalanceOfData}
+                "Mint Success! One More Time!"}
             </Button>
           )}
         </div>
