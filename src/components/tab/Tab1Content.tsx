@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import {
   Accordion,
   AccordionContent,
@@ -82,7 +91,7 @@ export default function Tab1Content() {
 
   // @ts-ignore
   const [totalMinted, setTotalMinted] = React.useState(0n);
-  const { isConnected } = useAccount();
+  const { address,isConnected } = useAccount();
   console.info("isConnected", isConnected);
 
   // ===
@@ -121,7 +130,22 @@ export default function Tab1Content() {
     functionName: "totalSupply",
   });
 
+
+  const { data: erc20BalanceOfData } = useReadContract({
+    ...contractConfig,
+    functionName: "erc20BalanceOf",
+    args: [address as `0x${string}`],
+  });
+
+  const { data: erc721BalanceOfData } = useReadContract({
+    ...contractConfig,
+    functionName: "erc721BalanceOf",
+    args: [address as `0x${string}`],
+  });
+
   console.info("totalSupplyData", totalSupplyData);
+  console.info("erc20BalanceOf", erc20BalanceOfData);
+  console.info("erc721BalanceOf", erc721BalanceOfData);
 
   const {
     data: txData,
@@ -156,7 +180,7 @@ export default function Tab1Content() {
         className="  px-1 justify-center items-center"
         plugins={[
           Autoplay({
-            delay: 6000,
+            delay: 2000,
           }),
         ]}
       >
@@ -205,7 +229,7 @@ export default function Tab1Content() {
           )}
 
           <div className="flex justify-center text-gray-400">
-            Minted Count：{Number(totalMinted)}
+            Minted：{Number(totalMinted)}
           </div>
 
           <div className="flex justify-center  text-gray-400">
@@ -259,11 +283,61 @@ export default function Tab1Content() {
               {mounted &&
                 isConnected &&
                 isMinted &&
-                "Mint Success! One More Time!"}
+                "Mint Success! One More Time!" + erc721BalanceOfData}
             </Button>
           )}
         </div>
       </div>
+
+
+      {erc721BalanceOfData!=undefined &&
+
+          <div>
+            <div className="pt-9 text-xl font-bold">Your 404 Assets</div>
+            <Table>
+              <TableCaption></TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="">
+                    #
+                  </TableHead>
+                  <TableHead>Token</TableHead>
+                  <TableHead>Balance</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="font-medium">
+                    <Image src="/blue-bg-zink50-circle-logo.png" height={36} width={36}
+                           alt="pop"/></TableCell>
+                  <TableCell>A404</TableCell>
+                  <TableCell>
+                    {Number(erc721BalanceOfData)}
+                  </TableCell>
+
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">
+                    <Image src="/diamonds/C2_VitruvianMan.jpg" height={36} width={36}
+                           alt="pop"/></TableCell>
+                  <TableCell>ART NFT</TableCell>
+                  <TableCell>
+                    {Number(erc721BalanceOfData)}
+                  </TableCell>
+
+                </TableRow>
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={3}></TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </div>
+
+
+      }
+
 
       {/* FAQ   */}
       <div className="flex w-full flex-col pb-8">&nbsp;</div>
