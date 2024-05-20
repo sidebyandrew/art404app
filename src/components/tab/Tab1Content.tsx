@@ -218,14 +218,14 @@ export default function Tab1Content() {
       <div className="flex flex-col">
         <div>
           {mintError && (
-            <div className="flex justify-center text-yellow-800">
-              Error: {mintError.message}
-            </div>
+              <div className="flex justify-center text-yellow-800">
+                Error: {mintError.message}
+              </div>
           )}
           {txError && (
-            <div className="flex justify-center text-yellow-800">
-              Error: {txError.message}
-            </div>
+              <div className="flex justify-center text-yellow-800">
+                Error: {txError.message}
+              </div>
           )}
 
           <div className="flex justify-center text-gray-400">
@@ -233,7 +233,11 @@ export default function Tab1Content() {
           </div>
 
           <div className="flex justify-center  text-gray-400">
-            Max Supply：{max_supply_404_str}
+            Max Supply at Testnet：{max_supply_404_str}
+          </div>
+
+          <div className="flex justify-center text-gray-400 font-extralight">
+            Max Supply at Mainnet： 10,000
           </div>
 
           <div className="flex justify-center text-gray-400">
@@ -244,9 +248,9 @@ export default function Tab1Content() {
           </div>
           <div className="flex items-center justify-center ">
             <Progress
-              value={Number(
-                ((Number(totalMinted) / max_supply_404) * 100).toFixed(3),
-              )}
+                value={Number(
+                    ((Number(totalMinted) / max_supply_404) * 100).toFixed(3),
+                )}
             />
             <div className=" text-gray-400 ">
               &nbsp;{((Number(totalMinted) / max_supply_404) * 100).toFixed(3)}%
@@ -256,9 +260,9 @@ export default function Tab1Content() {
 
         <div className="flex flex-col mt-3">
           {mounted && isConnected && !isMinted && (
-            <Button
-              variant={"default"}
-              disabled={!writeContract || isMintLoading || isMintStarted}
+              <Button
+                  variant={"default"}
+                  disabled={!writeContract || isMintLoading || isMintStarted}
               size="lg"
               color="primary"
               onClick={() => writeContract?.(data!.request)}
@@ -382,7 +386,9 @@ export default function Tab1Content() {
         <AccordionItem value="3" aria-label="Accordion 3">
           <AccordionTrigger>What about Tokenomics?</AccordionTrigger>
           <AccordionContent>
-            <p className="text-gray-400">Total Supply: 10K.</p>
+            <p className="text-gray-400">Total Supply:<span className={"text-red-400"}> {max_supply_404_str}</span>  at Artela Testnet
+            </p>
+            <p className="text-gray-400">Total Supply: <span className={"text-indigo-400"}>10,000</span>  at Artela Mainnet.</p>
             <p className="text-gray-400">
               The same as{" "}
               <a href="https://coinmarketcap.com/view/erc-404/">
