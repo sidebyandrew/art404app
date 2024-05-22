@@ -60,6 +60,7 @@ import {
 } from "wagmi";
 import { abi } from "@/contracts/ART404-ABI";
 import { parseEther } from "viem";
+import { useBalance } from 'wagmi'
 
 const contractConfig = {
   address: art_404_contract_address,
@@ -92,6 +93,10 @@ export default function Tab1Content() {
   // @ts-ignore
   const [totalMinted, setTotalMinted] = React.useState(0n);
   const { address,isConnected } = useAccount();
+  const { data:balanceData, isError, isLoading } = useBalance({
+    address: address,
+  })
+
   console.info("isConnected", isConnected);
 
   // ===
@@ -111,10 +116,7 @@ export default function Tab1Content() {
     value: parseEther("0.001"),
   });
 
-  console.info("==============================");
-  console.info(data);
-  console.info("==============================");
-  console.info("==============================");
+  console.info("useSimulateContract",data);
 
   // ===
   const {
@@ -246,6 +248,9 @@ export default function Tab1Content() {
           <div className="flex justify-center text-gray-400">
             Price: 0.001 ART at Testnet
           </div>
+          <div className="flex justify-center text-gray-400">
+            Your ART Balance: {balanceData?.formatted ? Number(balanceData?.formatted).toFixed(3):0}
+          </div>
           <div className="flex items-center justify-center ">
             <Progress
                 value={Number(
@@ -265,11 +270,28 @@ export default function Tab1Content() {
                   disabled={!writeContract || isMintLoading || isMintStarted}
               size="lg"
               color="primary"
-              onClick={() => writeContract?.(data!.request)}
+              onClick={() =>
+              {
+
+
+                // @ts-ignore
+                if (!balanceData || balanceData?.value == 0n) {
+                  quickToast("Check Your Balance","Make sure you have ART.")
+                }else{
+                  return  writeContract?.(data!.request);
+                }
+
+
+
+              }
+
+
+              }
             >
               {isMintLoading && "Waiting for approval"}
               {isMintStarted && "Minting..."}
               {!isMintLoading && !isMintStarted && "Fair Mint"}
+
             </Button>
           )}
 

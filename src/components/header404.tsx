@@ -69,7 +69,7 @@ export default function Header404() {
               Wallet Connect at Mobile Phone have a lot of compatibility issues.
             </p>
             <ul className={"mb-3"}>
-              <li>We recommend using Coinbase Wallet on your phone.</li>
+              <li>We recommend using <a href="https://www.okx.com/help/how-do-i-update-my-okx-wallet-extension-on-google-chrome">OKX Wallet</a> or Coinbase Wallet on your phone.</li>
             </ul>
             <div>
               {" "}
