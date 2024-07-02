@@ -13,12 +13,12 @@ export const appName404: string = "art404app";
 export const projectId404: string = "bb84875c82bab72719dba296deb14d33";
 
 export const art_404_contract_address: `0x${string}` =
-  "0x2F3Ba6f99CF956dD24fe565537c4969a15e70f9D";
+  "0x28aD2009131664B626F59f4F31336927a84DB2bb";
 
 // @ts-ignore
 export const bigNumber18: bigint = 1000000000000000000n;
-export const max_supply_404: number = 200000;
-export const max_supply_404_str: string = "200,000";
+export const max_supply_404: number = 1000000;
+export const max_supply_404_str: string = "1000,000";
 
 export const page_size: number = 10;
 
